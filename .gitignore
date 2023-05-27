@@ -1,0 +1,33 @@
+# CMake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# Build files
+bin/
+
+# Visual Studio Code
+.vscode/
+
+# VS CMake Project
+.vs/
+out/
+
+# Clion Project
+.idea/
+cmake-build-debug/
+cmake-build-release/
+
+# Logs
+*.log
+
+# Clang cache
+.cache/
