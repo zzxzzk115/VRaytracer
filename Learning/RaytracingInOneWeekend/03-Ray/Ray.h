@@ -6,16 +6,16 @@ class Ray
 {
 public:
     Ray() {}
-    Ray(const Point3& origin, const Vector3& direction) : m_origin(origin), m_direction(direction) {}
+    Ray(const Point3& origin, const Vector3& direction) : m_Origin(origin), m_Direction(direction) {}
 
-    Point3  Origin() const { return m_origin; }
-    Vector3 Direction() const { return m_direction; }
+    Point3  Origin() const { return m_Origin; }
+    Vector3 Direction() const { return m_Direction; }
 
-    Point3 At(double t) const { return m_origin + t * m_direction; }
+    Point3 At(double t) const { return m_Origin + t * m_Direction; }
 
 private:
-	Point3  m_origin;
-    Vector3 m_direction;
+	Point3  m_Origin;
+    Vector3 m_Direction;
 };
 
 // Ray Utility Functions

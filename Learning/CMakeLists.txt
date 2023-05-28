@@ -1,1 +1,1 @@
-add_subdirectory(RaytracingInOneWeek)
+add_subdirectory(RaytracingInOneWeekend)
