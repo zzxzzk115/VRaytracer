@@ -6,8 +6,8 @@
 
 // Image
 const double AspectRatio = 16.0 / 9.0;
-const int ImageWidth  = 400;
-const int ImageHeight = static_cast<int>(ImageWidth / AspectRatio);
+const int    ImageWidth  = 400;
+const int    ImageHeight = static_cast<int>(ImageWidth / AspectRatio);
 
 int main()
 {

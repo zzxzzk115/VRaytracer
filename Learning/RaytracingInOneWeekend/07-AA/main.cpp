@@ -2,13 +2,15 @@
 #include "Color.h"
 #include "HittableList.h"
 #include "Sphere.h"
+#include "Camera.h"
 
 #include <iostream>
 
 // Image
-const double AspectRatio = 16.0 / 9.0;
-const int    ImageWidth  = 400;
-const int    ImageHeight = static_cast<int>(ImageWidth / AspectRatio);
+const double AspectRatio     = 16.0 / 9.0;
+const int    ImageWidth      = 400;
+const int    ImageHeight     = static_cast<int>(ImageWidth / AspectRatio);
+const int    SamplesPerPixel = 100;
 
 Color GetRayColor(const Ray& r, const Hittable& world)
 {
@@ -31,14 +33,7 @@ int main()
     world.Add(std::make_shared<Sphere>(Point3(0, -100.5, -1), 100));
 
     // Camera
-    const double viewPortHeight = 2.0;
-    const double viewPortWidth  = AspectRatio * viewPortHeight;
-    const double focalLength    = 1.0;
-
-    const auto origin = Point3(0, 0, 0);
-    const auto horizontal = Vector3(viewPortWidth, 0, 0);
-    const auto vertical   = Vector3(0, viewPortHeight, 0);
-    const auto lowerLeftCorner = origin - horizontal / 2 - vertical / 2 - Vector3(0, 0, focalLength);
+    Camera cam;
 
     // Render
     std::cout << "P3\n" << ImageWidth << ' ' << ImageHeight << "\n255\n";
@@ -47,11 +42,15 @@ int main()
     {
         for (int i = 0; i < ImageWidth; ++i)
         {
-            double  u = static_cast<double>(i) / (ImageWidth - 1);
-            double  v = static_cast<double>(j) / (ImageHeight - 1);
-            Ray   r(origin, lowerLeftCorner + u * horizontal + v * vertical - origin);
-            const Color pixelColor = GetRayColor(r, world);
-            WriteColor(std::cout, pixelColor);
+            Color pixelColor(0, 0, 0);
+            for (int s = 0; s < SamplesPerPixel; ++s)
+            {
+                double u = (i + GetRandomDouble()) / (ImageWidth - 1);
+                double v = (j + GetRandomDouble()) / (ImageHeight - 1);
+                Ray    r = cam.GetRay(u, v);
+                pixelColor += GetRayColor(r, world);
+            }
+            WriteColor(std::cout, pixelColor, SamplesPerPixel);
         }
     }
 
