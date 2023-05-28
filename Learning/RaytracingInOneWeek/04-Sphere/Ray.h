@@ -20,8 +20,22 @@ private:
 
 // Ray Utility Functions
 
+inline bool HitSphere(const Point3& center, double radius, const Ray& r)
+{
+    Vector3   oc    = r.Origin() - center;
+    double    a     = DotProduct(r.Direction(), r.Direction());
+    double    b     = 2.0 * DotProduct(oc, r.Direction());
+    double    c     = DotProduct(oc, oc) - radius * radius;
+    double    delta = b * b - 4 * a * c;
+    return delta > 0;
+}
+
 inline Color GetRayColor(const Ray& r)
 {
+    // If hit the sphere, return Red.
+    if (HitSphere(Point3(0, 0, -1), 0.5, r))
+        return Color(1, 0, 0);
+
 	Vector3 unitDirection = Normalize(r.Direction());
 
     // t [0, 1]
