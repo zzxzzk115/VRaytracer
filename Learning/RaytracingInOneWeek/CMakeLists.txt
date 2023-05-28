@@ -2,3 +2,4 @@ set(RAYTRACING_IN_ONE_WEEK_BINARY_ROOT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Raytrac
 
 add_subdirectory(01-PPM)
 add_subdirectory(02-Vector3)
+add_subdirectory(03-Ray)
