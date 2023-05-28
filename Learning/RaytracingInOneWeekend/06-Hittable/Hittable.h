@@ -10,6 +10,13 @@ struct HitRecord
     Point3  Point;
     Vector3 Normal;
     double  T;
+    bool    IsFrontFace;
+
+    inline void SetFaceNormal(const Ray& r, const Vector3& outwardNormal)
+    {
+        IsFrontFace = DotProduct(r.Direction(), outwardNormal) < 0;
+        Normal      = IsFrontFace ? outwardNormal : -outwardNormal;
+    }
 };
 
 /*

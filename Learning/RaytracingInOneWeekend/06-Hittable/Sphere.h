@@ -23,7 +23,7 @@ bool Sphere::Hit(const Ray& r, double tMin, double tMax, HitRecord& rec) const
     double  halfB  = DotProduct(oc, r.Direction());
     double  c      = oc.LengthSquared() - m_Radius * m_Radius;
 
-    double delta = half_b * half_b - a * c;
+    double delta = halfB * halfB - a * c;
     if (delta < 0)
         return false;
 
@@ -40,7 +40,8 @@ bool Sphere::Hit(const Ray& r, double tMin, double tMax, HitRecord& rec) const
 
     rec.T = root;
     rec.Point = r.At(rec.T);
-    rec.Normal = (rec.Point - m_Center) / m_Radius;
+    Vector3 outwardNormal = (rec.Point - m_Center) / m_Radius;
+    rec.SetFaceNormal(r, outwardNormal);
 
     return true;
 }

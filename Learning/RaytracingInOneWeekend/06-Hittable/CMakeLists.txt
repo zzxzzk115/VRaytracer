@@ -5,7 +5,7 @@ set(TARGET_BINARY_DIR ${RAYTRACING_IN_ONE_WEEKEND_BINARY_ROOT}/${TARGET_NAME})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/run.bat DESTINATION ${TARGET_BINARY_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/run.sh DESTINATION ${TARGET_BINARY_DIR})
 
-add_executable(${TARGET_NAME} main.cpp "Hittable.h" "Sphere.h")
+add_executable(${TARGET_NAME} main.cpp "Hittable.h" "Sphere.h" "HittableList.h" "Common.h")
 
 # Set output path
 set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TARGET_BINARY_DIR})

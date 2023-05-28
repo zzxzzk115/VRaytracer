@@ -1,6 +1,7 @@
-#include "Vector3.h"
+#include "Common.h"
 #include "Color.h"
-#include "Ray.h"
+#include "HittableList.h"
+#include "Sphere.h"
 
 #include <iostream>
 
@@ -9,8 +10,26 @@ const double AspectRatio = 16.0 / 9.0;
 const int ImageWidth  = 400;
 const int ImageHeight = static_cast<int>(ImageWidth / AspectRatio);
 
+Color GetRayColor(const Ray& r, const Hittable& world)
+{
+    HitRecord rec;
+    if (world.Hit(r, 0, Infinity, rec))
+    {
+        return 0.5 * (rec.Normal + Color(1, 1, 1));
+    }
+
+    Vector3 unitDirection = Normalize(r.Direction());
+    double  t             = 0.5 * (unitDirection.y() + 1.0);
+    return (1.0 - t) * White + t * LightBlue;
+}
+
 int main()
 {
+    // World
+    HittableList world;
+    world.Add(std::make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+    world.Add(std::make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+
     // Camera
     const double viewPortHeight = 2.0;
     const double viewPortWidth  = AspectRatio * viewPortHeight;
@@ -31,7 +50,7 @@ int main()
             double  u = static_cast<double>(i) / (ImageWidth - 1);
             double  v = static_cast<double>(j) / (ImageHeight - 1);
             Ray   r(origin, lowerLeftCorner + u * horizontal + v * vertical - origin);
-            const Color pixelColor = GetRayColor(r);
+            const Color pixelColor = GetRayColor(r, world);
             WriteColor(std::cout, pixelColor);
         }
     }
