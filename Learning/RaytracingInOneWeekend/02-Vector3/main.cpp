@@ -12,6 +12,7 @@ int main()
 
     for (int j = ImageHeight - 1; j >= 0; --j)
     {
+        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < ImageWidth; ++i)
         {
             Color pixelColor(double(i) / (ImageWidth - 1), double(j) / (ImageHeight - 1), 0.25);
@@ -19,5 +20,6 @@ int main()
         }
     }
 
+    std::cerr << "\nDone.\n";
     return 0;
 }

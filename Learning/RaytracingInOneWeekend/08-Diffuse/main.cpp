@@ -11,13 +11,20 @@ const double AspectRatio     = 16.0 / 9.0;
 const int    ImageWidth      = 400;
 const int    ImageHeight     = static_cast<int>(ImageWidth / AspectRatio);
 const int    SamplesPerPixel = 100;
+const int    MaxDepth        = 50;
 
-Color GetRayColor(const Ray& r, const Hittable& world)
+Color GetRayColor(const Ray& r, const Hittable& world, int depth)
 {
     HitRecord rec;
-    if (world.Hit(r, 0, Infinity, rec))
+
+    // If we've exceeded the ray bounce limit, no more light is gathered.
+    if (depth <= 0)
+        return Black;
+
+    if (world.Hit(r, 0.001, Infinity, rec))
     {
-        return 0.5 * (rec.Normal + Color(1, 1, 1));
+        Point3 target = rec.Point + GetRandomInHemisphere(rec.Normal);
+        return 0.5 * GetRayColor(Ray(rec.Point, target - rec.Point), world, depth - 1);
     }
 
     Vector3 unitDirection = Normalize(r.Direction());
@@ -49,7 +56,7 @@ int main()
                 double u = (i + GetRandomDouble()) / (ImageWidth - 1);
                 double v = (j + GetRandomDouble()) / (ImageHeight - 1);
                 Ray    r = cam.GetRay(u, v);
-                pixelColor += GetRayColor(r, world);
+                pixelColor += GetRayColor(r, world, MaxDepth);
             }
             WriteColor(std::cout, pixelColor, SamplesPerPixel);
         }

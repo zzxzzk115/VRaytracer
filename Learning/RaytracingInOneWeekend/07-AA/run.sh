@@ -1,3 +1,3 @@
 #! /bin/bash
 
-./07-AA> image.ppm
+./07-AA > image.ppm
