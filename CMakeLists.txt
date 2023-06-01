@@ -11,6 +11,8 @@ option(BUILD_LEARNING "Build learning codes" ON)
 include(CMakeDependentOption)
 include(CMake/WSL.cmake)
 
+find_package(OpenMP REQUIRED)
+
 # Include guards
 if (PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(

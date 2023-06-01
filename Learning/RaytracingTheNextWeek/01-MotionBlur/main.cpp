@@ -1,9 +1,9 @@
-#include "Common.h"
-#include "Color.h"
-#include "HittableList.h"
-#include "Sphere.h"
 #include "Camera.h"
+#include "Color.h"
+#include "Common.h"
+#include "HittableList.h"
 #include "Material.h"
+#include "Sphere.h"
 
 #include <iostream>
 
@@ -26,8 +26,8 @@ Color GetRayColor(const Ray& r, const Hittable& world, int depth)
 
     if (world.Hit(r, 0.001, Infinity, rec))
     {
-        Ray    scattered;
-        Color  attenuation;
+        Ray   scattered;
+        Color attenuation;
         if (rec.MaterialPtr->Scatter(r, rec, attenuation, scattered))
             return attenuation * GetRayColor(scattered, world, depth - 1);
         return Black;
@@ -40,7 +40,7 @@ Color GetRayColor(const Ray& r, const Hittable& world, int depth)
 
 HittableList GetRandomScene()
 {
-	HittableList world;
+    HittableList world;
 
     auto materialGround = std::make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
     world.Add(std::make_shared<Sphere>(Point3(0, -1000, 0), 1000, materialGround));
@@ -58,21 +58,20 @@ HittableList GetRandomScene()
 
                 if (materialChosen < 0.8)
                 {
-	                // Diffuse
-                    Color albedo = Color::GetRandom() * Color::GetRandom();
+                    // Diffuse
+                    Color albedo   = Color::GetRandom() * Color::GetRandom();
                     materialSphere = std::make_shared<Lambertian>(albedo);
-                    
                 }
                 else if (materialChosen < 0.95)
                 {
-	                // Metal
-                    Color albedo = Color::GetRandom(0.5, 1);
-                    double fuzz   = GetRandomDouble(0, 0.5);
+                    // Metal
+                    Color  albedo  = Color::GetRandom(0.5, 1);
+                    double fuzz    = GetRandomDouble(0, 0.5);
                     materialSphere = std::make_shared<Metal>(albedo, fuzz);
                 }
                 else
                 {
-	                // Glass
+                    // Glass
                     materialSphere = std::make_shared<Dielectric>(1.5);
                 }
 
