@@ -8,10 +8,10 @@ public:
     virtual bool Scatter(const Ray& rIn, const HitRecord& rec, Color& attenuation, Ray& scattered) const = 0;
 };
 
-class Lanbertian : public Material
+class Lambertian : public Material
 {
 public:
-    Lanbertian(const Color& albedo) : m_Albedo(albedo) {}
+    Lambertian(const Color& albedo) : m_Albedo(albedo) {}
 
     virtual bool Scatter(const Ray& rIn, const HitRecord& rec, Color& attenuation, Ray& scattered) const override
     {
