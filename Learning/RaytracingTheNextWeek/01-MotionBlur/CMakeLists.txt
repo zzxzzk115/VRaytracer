@@ -5,7 +5,7 @@ set(TARGET_BINARY_DIR ${RAYTRACING_THE_NEXT_WEEK_BINARY_ROOT}/${TARGET_NAME})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/run.bat DESTINATION ${TARGET_BINARY_DIR})
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/run.sh DESTINATION ${TARGET_BINARY_DIR})
 
-add_executable(${TARGET_NAME} main.cpp "Hittable.h" "Sphere.h" "HittableList.h" "Common.h" "Camera.h" )
+add_executable(${TARGET_NAME} main.cpp "Hittable.h" "Sphere.h" "HittableList.h" "Common.h" "Camera.h"  "MovingSphere.h")
 
 # Add OpenMP support
 target_include_directories(${TARGET_NAME} PRIVATE ${OpenMP_CXX_INCLUDE_DIRS})

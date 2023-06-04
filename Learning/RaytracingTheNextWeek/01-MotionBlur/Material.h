@@ -21,7 +21,7 @@ public:
         if (scatterDirection.IsNearZero())
             scatterDirection = rec.Normal;
 
-        scattered   = Ray(rec.Point, scatterDirection);
+        scattered   = Ray(rec.Point, scatterDirection, rIn.Time());
         attenuation = m_Albedo;
         return true;
     }
@@ -38,7 +38,7 @@ public:
     virtual bool Scatter(const Ray& rIn, const HitRecord& rec, Color& attenuation, Ray& scattered) const override
     {
         Vector3 reflected = Reflect(Normalize(rIn.Direction()), rec.Normal);
-        scattered         = Ray(rec.Point, reflected + m_Fuzz * GetRandomInUnitSphere());
+        scattered         = Ray(rec.Point, reflected + m_Fuzz * GetRandomInUnitSphere(), rIn.Time());
         attenuation       = m_Albedo;
         return DotProduct(scattered.Direction(), rec.Normal) > 0;
     }
@@ -75,7 +75,7 @@ public:
             direction = Refract(unitDirection, rec.Normal, refractionRatio);
         }
 
-        scattered = Ray(rec.Point, direction);
+        scattered = Ray(rec.Point, direction, rIn.Time());
         return true;
     }
 

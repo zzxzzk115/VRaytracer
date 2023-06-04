@@ -4,12 +4,13 @@
 #include "HittableList.h"
 #include "Material.h"
 #include "Sphere.h"
+#include "MovingSphere.h"
 
 #include <iostream>
 
 // Image
-const double AspectRatio     = 3.0 / 2.0;
-const int    ImageWidth      = 1200;
+const double AspectRatio     = 16.0 / 9.0;
+const int    ImageWidth      = 400;
 const int    ImageHeight     = static_cast<int>(ImageWidth / AspectRatio);
 const int    SamplesPerPixel = 20;
 const int    MaxDepth        = 8;
@@ -61,6 +62,8 @@ HittableList GetRandomScene()
                     // Diffuse
                     Color albedo   = Color::GetRandom() * Color::GetRandom();
                     materialSphere = std::make_shared<Lambertian>(albedo);
+                    Point3 center2 = center + Vector3(0, GetRandomDouble(0, 0.5), 0);
+                    world.Add(std::make_shared<MovingSphere>(center, center2, 0.0, 1.0, 0.2, materialSphere));
                 }
                 else if (materialChosen < 0.95)
                 {
@@ -68,14 +71,14 @@ HittableList GetRandomScene()
                     Color  albedo  = Color::GetRandom(0.5, 1);
                     double fuzz    = GetRandomDouble(0, 0.5);
                     materialSphere = std::make_shared<Metal>(albedo, fuzz);
+                    world.Add(std::make_shared<Sphere>(center, 0.2, materialSphere));
                 }
                 else
                 {
                     // Glass
                     materialSphere = std::make_shared<Dielectric>(1.5);
+                    world.Add(std::make_shared<Sphere>(center, 0.2, materialSphere));
                 }
-
-                world.Add(std::make_shared<Sphere>(center, 0.2, materialSphere));
             }
         }
     }
@@ -103,7 +106,7 @@ int main()
     Vector3 viewUp(0, 1, 0);
     double  distanceToFocus = 10.0;
     double  aperture        = 0.1;
-    Camera  cam(lookFrom, lookAt, viewUp, 20.0, AspectRatio, aperture, distanceToFocus);
+    Camera  cam(lookFrom, lookAt, viewUp, 20.0, AspectRatio, aperture, distanceToFocus, 0.0, 1.0);
 
     // Render
     std::cout << "P3\n" << ImageWidth << ' ' << ImageHeight << "\n255\n";
