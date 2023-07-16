@@ -64,6 +64,8 @@ set(BINARY_ROOT_DIR "${CMAKE_INSTALL_PREFIX}/")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${VRAYTRACER_ROOT_DIR}/bin)
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 
+add_subdirectory(Source)
+
 if (BUILD_LEARNING)
     add_subdirectory(Learning)
 endif()
