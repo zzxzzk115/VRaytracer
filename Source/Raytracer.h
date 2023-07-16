@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Macro.h"
+#include "IRuntimeModule.h"
+#include "UIModule.h"
+#include "Window.h"
 
 namespace VRaytracer
 {
@@ -13,23 +16,17 @@ namespace VRaytracer
     {
     public:
         Raytracer(RaytracerConfiguration config) : m_Config(config) {}
-        void Run()
-        {
-            Init();
 
-            while (true)
-            {
-                VRT_INFO("VRaytracer is running");
-            }
-
-            Release();
-        }
+        void Run();
+        static Ref<Window> GetWindow() { return s_Window; }
 
     private:
-        bool Init() {}
-        void Release() {}
+        bool Init();
+        void Release();
 
     private:
-        RaytracerConfiguration m_Config;
+        RaytracerConfiguration           m_Config;
+        std::vector<Ref<IRuntimeModule>> m_RuntimeModules;
+        static Ref<Window>               s_Window;
     };
 } // namespace VRaytracer
