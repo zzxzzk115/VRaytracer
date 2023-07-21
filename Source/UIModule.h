@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IRuntimeModule.h"
+#include "Event.h"
 
 namespace VRaytracer
 {
@@ -11,5 +12,10 @@ namespace VRaytracer
         virtual void Update() override;
         virtual void Release() override;
         virtual std::string GetName() override { return "UIModule"; }
+
+        Event<void> EventOnRenderButtonDown;
+
+    private:
+        void DrawWidgets();
     };
 } // namespace VRaytracer

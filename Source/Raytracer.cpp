@@ -2,7 +2,17 @@
 
 namespace VRaytracer
 {
-    Ref<Window> Raytracer::s_Window = nullptr;
+    Ref<Window>        Raytracer::s_Window = nullptr;
+    Ref<RaytracerCore> Raytracer::s_Core   = nullptr;
+
+    void Render() 
+    { 
+        auto frameBuffer = Raytracer::GetCore()->Render();
+
+        // TODO: Use stb_image to load an opengl texture
+
+        // TODO: Invoke Render Event
+    }
 
     void Raytracer::Run()
     {
@@ -41,8 +51,12 @@ namespace VRaytracer
             return false;
         }
 
+        // Init Core
+        s_Core = CreateRef<RaytracerCore>();
+
         // Init Modules
         auto uiModule = CreateRef<UIModule>();
+        uiModule.get()->EventOnRenderButtonDown.Subscribe(Render);
         m_RuntimeModules.push_back(uiModule);
 
         for (auto& runtimeModule : m_RuntimeModules)
@@ -63,6 +77,8 @@ namespace VRaytracer
     {
         VRT_INFO("Raytracer Release...");
 
+        // TODO: Unsubscribe events
+
         for (auto& runtimeModule : m_RuntimeModules)
         {
             runtimeModule->Release();
@@ -70,4 +86,5 @@ namespace VRaytracer
 
         VRT_INFO("Raytracer Release OK");
     }
+
 } // namespace VRaytracer
