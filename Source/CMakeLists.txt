@@ -3,7 +3,7 @@ set(TARGET_BINARY_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TARGET_NAME})
 
 add_subdirectory(ThirdParty)
 
-add_executable(${TARGET_NAME} main.cpp "Platform.h" "Log.h" "Base.h" "Log.cpp" "Raytracer.h" "Macro.h" "IRuntimeModule.h" "UIModule.h" "UIModule.cpp" "Raytracer.cpp" "Window.h" "Window.cpp" "RaytracerCore.h" "Event.h")
+add_executable(${TARGET_NAME} main.cpp "Platform.h" "Log.h" "Base.h" "Log.cpp" "Raytracer.h" "Macro.h" "IRuntimeModule.h" "UIModule.h" "UIModule.cpp" "Raytracer.cpp" "Window.h" "Window.cpp" "RaytracerCore.h" "Event.h" "Renderer.h" "Renderer.cpp")
 
 # Set output path
 set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${TARGET_BINARY_DIR})

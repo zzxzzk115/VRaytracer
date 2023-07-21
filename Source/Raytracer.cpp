@@ -1,4 +1,6 @@
 #include "Raytracer.h"
+#include "Renderer.h"
+#include "UIModule.h"
 
 namespace VRaytracer
 {
@@ -10,6 +12,7 @@ namespace VRaytracer
         auto frameBuffer = Raytracer::GetCore()->Render();
 
         // TODO: Use stb_image to load an opengl texture
+
 
         // TODO: Invoke Render Event
     }
@@ -47,6 +50,12 @@ namespace VRaytracer
 
         s_Window = CreateRef<Window>(windowConfig);
         if (!s_Window->Create())
+        {
+            return false;
+        }
+
+        // Init Renderer
+        if (!Renderer::Init())
         {
             return false;
         }

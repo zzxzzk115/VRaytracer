@@ -3,8 +3,7 @@
 #include "UIModule.h"
 #include "Macro.h"
 #include "Raytracer.h"
-
-#include <glad/glad.h>
+#include "Renderer.h"
 
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
@@ -24,12 +23,6 @@ namespace VRaytracer
 {
     bool UIModule::Init()
     {
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        {
-            VRT_ERROR("Failed to initialize GLAD");
-            return false;
-        }
-
         // Decide GL+GLSL versions
 #if defined(IMGUI_IMPL_OPENGL_ES2)
         // GL ES 2.0 + GLSL 100
@@ -93,9 +86,8 @@ namespace VRaytracer
 
         ImVec4 clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-        glViewport(0, 0, window->GetWidth(), window->GetHeight());
-        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
-        glClear(GL_COLOR_BUFFER_BIT);
+        Renderer::SetViewport(0, 0, window->GetWidth(), window->GetHeight());
+        Renderer::Clear(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -126,13 +118,11 @@ namespace VRaytracer
         // Draw RenderTarget
 
         // Draw Control Panel
-        if (ImGui::Begin("Control Panel"))
+        ImGui::Begin("Control Panel");
+        if (ImGui::Button("Render"))
         {
-            if (ImGui::Button("Render"))
-            {
-                EventOnRenderButtonDown.Invoke();
-            }
-            ImGui::End();
+            EventOnRenderButtonDown.Invoke();
         }
+        ImGui::End();
     }
 } // namespace VRaytracer
