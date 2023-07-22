@@ -13,9 +13,11 @@ namespace VRaytracer
         virtual void Release() override;
         virtual std::string GetName() override { return "UIModule"; }
 
-        Event<void> EventOnRenderButtonDown;
-
     private:
         void DrawWidgets();
+
+    private:
+        bool     m_NeedRenderNewFrame;
+        uint32_t m_RenderTextureWidth, m_RenderTextureHeight;
     };
 } // namespace VRaytracer

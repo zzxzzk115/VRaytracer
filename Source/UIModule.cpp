@@ -84,10 +84,7 @@ namespace VRaytracer
         auto window       = Raytracer::GetWindow();
         auto nativeWindow = window->GetNativeWindow();
 
-        ImVec4 clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
         Renderer::SetViewport(0, 0, window->GetWidth(), window->GetHeight());
-        Renderer::Clear(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -113,16 +110,42 @@ namespace VRaytracer
 
     void UIModule::DrawWidgets() 
     {
+        Renderer::Clear(0.45f, 0.55f, 0.60f, 1.00f);
+
         // Draw Menubar & Toolbar
 
-        // Draw RenderTarget
-
-        // Draw Control Panel
+        // Draw Control Panel        
         ImGui::Begin("Control Panel");
-        if (ImGui::Button("Render"))
+        m_NeedRenderNewFrame = ImGui::Button("Render"); 
+        ImGui::End();
+
+        // Draw RenderTarget
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        ImGui::Begin("RenderTarget");
+        ImGui::PopStyleVar();
+        if (m_NeedRenderNewFrame)
         {
-            EventOnRenderButtonDown.Invoke();
+            auto         size = ImGui::GetContentRegionAvail();
+            if (size.x <= 0 || size.y <= 0)
+            {
+                size = {600, 400};
+            }
+            RenderConfig renderConfig;
+            renderConfig.RenderTargetWidth  = size.x;
+            renderConfig.RenderTargetHeight = size.y;
+            auto frameBuffer                = Raytracer::GetCore()->Render(renderConfig);
+            Renderer::SetViewport(0, 0, frameBuffer->Width, frameBuffer->Height);
+            Renderer::Render(frameBuffer);
+            m_RenderTextureWidth = frameBuffer->Width;
+            m_RenderTextureHeight = frameBuffer->Height;
+        }
+        auto renderTextureID = Renderer::GetRenderTextureID();
+        if (renderTextureID != 0)
+        {
+            ImVec2 frameBufferSize {(float)m_RenderTextureWidth, (float)m_RenderTextureHeight};
+            ImGui::Image((ImTextureID)(intptr_t)renderTextureID, frameBufferSize, {0, 1}, {1, 0});
         }
         ImGui::End();
+
     }
 } // namespace VRaytracer
