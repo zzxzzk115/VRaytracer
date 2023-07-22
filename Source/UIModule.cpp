@@ -116,14 +116,14 @@ namespace VRaytracer
 
         // Draw Control Panel        
         ImGui::Begin("Control Panel");
-        m_NeedRenderNewFrame = ImGui::Button("Render"); 
+        bool needRenderNewFrame = ImGui::Button("Render"); 
         ImGui::End();
 
         // Draw RenderTarget
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("RenderTarget");
         ImGui::PopStyleVar();
-        if (m_NeedRenderNewFrame)
+        if (needRenderNewFrame)
         {
             auto         size = ImGui::GetContentRegionAvail();
             if (size.x <= 0 || size.y <= 0)

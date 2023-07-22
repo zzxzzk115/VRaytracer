@@ -17,7 +17,6 @@ namespace VRaytracer
         void DrawWidgets();
 
     private:
-        bool     m_NeedRenderNewFrame;
         uint32_t m_RenderTextureWidth, m_RenderTextureHeight;
     };
 } // namespace VRaytracer
