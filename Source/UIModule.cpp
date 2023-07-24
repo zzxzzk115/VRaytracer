@@ -3,7 +3,6 @@
 #include "UIModule.h"
 #include "Macro.h"
 #include "Raytracer.h"
-#include "Renderer.h"
 
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
@@ -18,6 +17,8 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
+
+#include <thread>
 
 namespace VRaytracer
 {
@@ -39,13 +40,12 @@ namespace VRaytracer
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
-        (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // Enable Docking
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
-        // io.ConfigViewportsNoAutoMerge = true;
-        // io.ConfigViewportsNoTaskBarIcon = true;
+        // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;   // Enable Docking
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
+        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
+        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();
@@ -114,9 +114,11 @@ namespace VRaytracer
 
         // Draw Menubar & Toolbar
 
-        // Draw Control Panel        
+        // Draw Control Panel
         ImGui::Begin("Control Panel");
-        bool needRenderNewFrame = ImGui::Button("Render"); 
+        ImGui::DragScalar("Samples Per Pixel", ImGuiDataType_U32, &m_RenderConfig.SamplesPerPixel);
+        ImGui::DragScalar("Max Depth", ImGuiDataType_U32, &m_RenderConfig.MaxDepth);
+        bool     needRenderNewFrame = ImGui::Button("Render");
         ImGui::End();
 
         // Draw RenderTarget
@@ -130,15 +132,22 @@ namespace VRaytracer
             {
                 size = {600, 400};
             }
-            RenderConfig renderConfig;
-            renderConfig.RenderTargetWidth  = size.x;
-            renderConfig.RenderTargetHeight = size.y;
-            auto frameBuffer                = Raytracer::GetCore()->Render(renderConfig);
-            Renderer::SetViewport(0, 0, frameBuffer->Width, frameBuffer->Height);
-            Renderer::Render(frameBuffer);
-            m_RenderTextureWidth = frameBuffer->Width;
-            m_RenderTextureHeight = frameBuffer->Height;
+            
+            m_RenderConfig.RenderTargetWidth = size.x;
+            m_RenderConfig.RenderTargetHeight = size.y;
+            
+            Raytracer::GetCore()->Render(m_RenderConfig);
+            Renderer::SetViewport(0, 0, m_RenderConfig.RenderTargetWidth, m_RenderConfig.RenderTargetHeight);
+            m_RenderTextureWidth  = m_RenderConfig.RenderTargetWidth;
+            m_RenderTextureHeight = m_RenderConfig.RenderTargetHeight;
         }
+
+        auto frameBuffer = Raytracer::GetCore()->GetFrameBuffer();
+        if (frameBuffer != nullptr)
+        {
+            Renderer::Render(frameBuffer);
+        }
+        
         auto renderTextureID = Renderer::GetRenderTextureID();
         if (renderTextureID != 0)
         {

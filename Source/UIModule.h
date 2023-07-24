@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IRuntimeModule.h"
-#include "Event.h"
+#include "Renderer.h"
 
 namespace VRaytracer
 {
@@ -17,6 +17,7 @@ namespace VRaytracer
         void DrawWidgets();
 
     private:
-        uint32_t m_RenderTextureWidth, m_RenderTextureHeight;
+        uint32_t     m_RenderTextureWidth, m_RenderTextureHeight;
+        RenderConfig m_RenderConfig;
     };
 } // namespace VRaytracer

@@ -17,6 +17,15 @@ namespace VRaytracer
             return false;
         }
 
+        glGenTextures(1, &s_RenderTextureID);
+        glBindTexture(GL_TEXTURE_2D, s_RenderTextureID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, s_RenderTextureID, 0);
+
         return true;
     }
 
@@ -26,17 +35,8 @@ namespace VRaytracer
         glDeleteTextures(1, &s_RenderTextureID);
     }
 
-    void Renderer::Render(std::shared_ptr<FrameBuffer> frameBuffer) 
+    void Renderer::Render(const std::shared_ptr<FrameBuffer>& frameBuffer) 
     {
-        glGenTextures(1, &s_RenderTextureID);
-        glBindTexture(GL_TEXTURE_2D, s_RenderTextureID);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, s_RenderTextureID, 0);
-        
         glBindTexture(GL_TEXTURE_2D, s_RenderTextureID);
         glTexImage2D(GL_TEXTURE_2D,
                      0,
@@ -46,7 +46,7 @@ namespace VRaytracer
                      0,
                      GL_RGBA,
                      GL_UNSIGNED_BYTE,
-                     frameBuffer->Data);
+                     frameBuffer->Data.data());
     }
 
     void Renderer::Clear(float r, float g, float b, float a)
