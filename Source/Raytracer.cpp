@@ -81,6 +81,7 @@ namespace VRaytracer
         }
         
         Renderer::Release();
+        s_Window->Release();
 
         VRT_INFO("Raytracer Release OK");
     }

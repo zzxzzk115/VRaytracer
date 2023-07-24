@@ -49,6 +49,8 @@ namespace VRaytracer
 
         glfwMakeContextCurrent(m_NativeWindow);
         glfwSwapInterval(m_Config.EnableVSync);
+
+        return true;
     }
 
     void Window::Update() { glfwPollEvents(); }
