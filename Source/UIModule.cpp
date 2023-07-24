@@ -1,5 +1,3 @@
-#pragma once
-
 #include "UIModule.h"
 #include "Macro.h"
 #include "Raytracer.h"
@@ -193,13 +191,10 @@ namespace VRaytracer
                 size = {600, 400};
             }
             
-            m_RenderConfig.RenderTargetWidth = size.x;
-            m_RenderConfig.RenderTargetHeight = size.y;
+            m_RenderTextureWidth = m_RenderConfig.RenderTargetWidth = size.x;
+            m_RenderTextureHeight = m_RenderConfig.RenderTargetHeight = size.y;
             
             Raytracer::GetCore()->Render(m_RenderConfig);
-            Renderer::SetViewport(0, 0, m_RenderConfig.RenderTargetWidth, m_RenderConfig.RenderTargetHeight);
-            m_RenderTextureWidth  = m_RenderConfig.RenderTargetWidth;
-            m_RenderTextureHeight = m_RenderConfig.RenderTargetHeight;
         }
 
         auto frameBuffer = Raytracer::GetCore()->GetFrameBuffer();

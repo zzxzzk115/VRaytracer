@@ -407,7 +407,6 @@ namespace VRaytracer
     class Sphere : public Hittable
     {
     public:
-        Sphere() {}
         Sphere(Point3 center, double radius, std::shared_ptr<Material> materialPtr) :
             m_Center(center), m_Radius(radius), m_MaterialPtr(materialPtr) {};
 
