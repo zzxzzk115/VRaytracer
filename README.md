@@ -81,6 +81,12 @@ Build it automatically:
 
 ### Build on MacOS
 
+To enable OpenMP on MacOS, you should install libomp with [Homebrew](https://brew.sh/):
+
+```bash
+brew install libomp
+```
+
 Build it automatically:
 
 ```bash
