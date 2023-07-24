@@ -15,6 +15,6 @@ jobs:
           submodules: 'true'
 
       - name: Install dependencies
-        run: sudo apt-get install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev mesa-common-dev
+        run: sudo apt-get install libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev mesa-common-dev libomp-dev
       - name: Build
         run: ./BuildLinux.sh

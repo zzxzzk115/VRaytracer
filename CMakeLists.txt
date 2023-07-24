@@ -11,8 +11,6 @@ option(BUILD_LEARNING "Build learning codes" ON)
 include(CMakeDependentOption)
 include(CMake/WSL.cmake)
 
-find_package(OpenMP REQUIRED)
-
 # Include guards
 if (PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
     message(
@@ -41,6 +39,23 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 else ()
     message(FATAL_ERROR "Not supported yet")
 endif ()
+
+# Find OpenMP
+if (PLATFORM_DARWIN)
+# libomp 15.0+ from brew is keg-only, so have to search in other locations.
+# See https://github.com/Homebrew/homebrew-core/issues/112107#issuecomment-1278042927.
+execute_process(COMMAND brew --prefix libomp
+        OUTPUT_VARIABLE HOMEBREW_LIBOMP_PREFIX
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+set(OpenMP_C_FLAGS
+        "-Xpreprocessor -fopenmp -I${HOMEBREW_LIBOMP_PREFIX}/include")
+set(OpenMP_CXX_FLAGS
+        "-Xpreprocessor -fopenmp -I${HOMEBREW_LIBOMP_PREFIX}/include")
+set(OpenMP_C_LIB_NAMES omp)
+set(OpenMP_CXX_LIB_NAMES omp)
+set(OpenMP_omp_LIBRARY ${HOMEBREW_LIBOMP_PREFIX}/lib/libomp.dylib)
+endif()
+find_package(OpenMP REQUIRED)
 
 # Arch Detection
 if (CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" OR

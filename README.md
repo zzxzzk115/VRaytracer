@@ -40,7 +40,7 @@ Install prerequisite packages:
 
 ```bash
 sudo apt-get update
-sudo apt-get install build-essential cmake git libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev mesa-common-dev
+sudo apt-get install build-essential cmake git libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev mesa-common-dev libomp-dev
 ```
 
 ### MacOS
@@ -81,12 +81,6 @@ Build it automatically:
 
 ### Build on MacOS
 
-To enable OpenMP on MacOS, you should install libomp with [Homebrew](https://brew.sh/):
-
-```bash
-brew install libomp
-```
-
 Build it automatically:
 
 ```bash
@@ -100,6 +94,13 @@ cmake -S . -B build -G "Xcode"
 ```
 
 Then open the generated project file with XCode.
+
+> If you didn't find OpenMP, you may need to install libomp with [Homebrew](https://brew.sh/): 
+> 
+> ```bash
+> brew install libomp
+> ```
+> 
 
 ## Acknowledgements
 
