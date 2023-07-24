@@ -34,3 +34,7 @@ cmake-build-release/
 
 # Clang cache
 .cache/
+
+# Imgui config
+imgui.ini
+!Source/Resources/imgui.ini
