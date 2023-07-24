@@ -9,11 +9,11 @@
 
 <p align="center">
     <a href="https://github.com/zzxzzk115/VRaytracer/actions" alt="CI-Windows">
-        <img src="https://img.shields.io/github/actions/workflow/status/zzxzzk115/VRaytracer/build_windows.yml?branch=master&label=CI-Windows&logo=github" /></a>
+        <img src="https://img.shields.io/github/actions/workflow/status/zzxzzk115/VRaytracer/BuildWindows.yml?branch=master&label=CI-Windows&logo=github" /></a>
     <a href="https://github.com/zzxzzk115/VRaytracer/actions" alt="CI-Linux">
-        <img src="https://img.shields.io/github/actions/workflow/status/zzxzzk115/VRaytracer/build_linux.yml?branch=master&label=CI-Linux&logo=github" /></a>
+        <img src="https://img.shields.io/github/actions/workflow/status/zzxzzk115/VRaytracer/BuildLinux.yml?branch=master&label=CI-Linux&logo=github" /></a>
     <a href="https://github.com/zzxzzk115/VRaytracer/actions" alt="CI-MacOS">
-        <img src="https://img.shields.io/github/actions/workflow/status/zzxzzk115/VRaytracer/build_macos.yml?branch=master&label=CI-MacOS&logo=github" /></a>
+        <img src="https://img.shields.io/github/actions/workflow/status/zzxzzk115/VRaytracer/BuildMacOS.yml?branch=master&label=CI-MacOS&logo=github" /></a>
     <a href="https://github.com/zzxzzk115/VRaytracer/issues" alt="GitHub Issues">
         <img src="https://img.shields.io/github/issues/zzxzzk115/VRaytracer">
     </a>
