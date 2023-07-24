@@ -4,7 +4,7 @@
     <img src="./Docs/Media/Logo.svg" />
 </div>
 <h4 align="center">
-  <strong>VRaytracer</strong> is a raytracer written in C++..
+  <strong>VRaytracer</strong> is a raytracer written in C++
 </h4>
 
 <p align="center">
