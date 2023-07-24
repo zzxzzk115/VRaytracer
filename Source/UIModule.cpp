@@ -75,11 +75,54 @@ namespace VRaytracer
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        // Setup Dockspace
+        static bool               dockSpaceOpen  = true;
+        static ImGuiDockNodeFlags dockSpaceFlags = ImGuiDockNodeFlags_None;
+
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->Pos);
+        ImGui::SetNextWindowSize(viewport->Size);
+        ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                       ImGuiWindowFlags_NoMove;
+        windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+        if (dockSpaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
+        {
+            windowFlags |= ImGuiWindowFlags_NoBackground;
+        }
+
+        // Begin Dockspace Window
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        ImGui::Begin("DockSpaceWindow", &dockSpaceOpen, windowFlags);
+        ImGui::PopStyleVar(3);
+
+        // DockSpace
+        ImGuiIO&    io          = ImGui::GetIO();
+        ImGuiStyle& style       = ImGui::GetStyle();
+        float       minWinSizeX = style.WindowMinSize.x;
+        float       minWinSizeY = style.WindowMinSize.y;
+        style.WindowMinSize.x   = 270.0f;
+        style.WindowMinSize.y   = 100.0f;
+        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+        {
+            ImGuiID dockSpaceId = ImGui::GetID("DockSpace");
+            ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), dockSpaceFlags);
+        }
+        style.WindowMinSize.x = minWinSizeX;
+        style.WindowMinSize.y = minWinSizeY;
+
         // Draw Widgets
         DrawWidgets();
 
+        // End Dockspace Window
+        ImGui::End();
+
         // Rendering
-        ImGuiIO& io = ImGui::GetIO();
         ImGui::Render();
         auto window       = Raytracer::GetWindow();
         auto nativeWindow = window->GetNativeWindow();
@@ -113,6 +156,23 @@ namespace VRaytracer
         Renderer::Clear(0.45f, 0.55f, 0.60f, 1.00f);
 
         // Draw Menubar & Toolbar
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+                {
+                }
+
+                if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+                {
+                }
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMenuBar();
+        }
 
         // Draw Control Panel
         ImGui::Begin("Control Panel");

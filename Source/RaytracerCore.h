@@ -630,11 +630,11 @@ namespace VRaytracer
                         auto g = color.y();
                         auto b = color.z();
 
-                        // Divide the color by the number of samples.
-                        auto scale = 1.0 / samplesPerPixel;
-                        r *= scale;
-                        g *= scale;
-                        b *= scale;
+                        // Divide the color by the number of samples and gamma-correct for gamma=2.0.
+                        double scale = 1.0 / samplesPerPixel;
+                        r            = sqrt(scale * r);
+                        g            = sqrt(scale * g);
+                        b            = sqrt(scale * b);
 
                         // Write Color
                         int        index           = j * frameBufferWidth + i;

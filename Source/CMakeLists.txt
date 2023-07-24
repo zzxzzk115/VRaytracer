@@ -12,6 +12,9 @@ if (MSVC)
     set_target_properties(${TARGET_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${TARGET_BINARY_DIR})
 endif ()
 
+# Copy imgui config
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources/imgui.ini DESTINATION ${TARGET_BINARY_DIR})
+
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 target_compile_options(${TARGET_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX->")
