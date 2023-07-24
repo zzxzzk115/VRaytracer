@@ -15,6 +15,7 @@ namespace VRaytracer
 
     private:
         void DrawWidgets();
+        void SetDarkThemeColors();
 
     private:
         uint32_t     m_RenderTextureWidth, m_RenderTextureHeight;
