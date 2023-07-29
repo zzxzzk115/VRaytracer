@@ -34,3 +34,8 @@ if (NOT TARGET args)
     add_subdirectory(args)
     set_target_properties(args PROPERTIES FOLDER ${THIRD_PARTY_FOLDER}/args)
 endif ()
+
+if (NOT TARGET cereal)
+    add_subdirectory(cereal)
+    set_target_properties(cereal PROPERTIES FOLDER ${THIRD_PARTY_FOLDER}/cereal)
+endif ()

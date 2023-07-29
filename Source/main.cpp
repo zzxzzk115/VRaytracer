@@ -1,5 +1,5 @@
-#include "Platform.h"
 #include "Log.h"
+#include "Platform.h"
 #include "Raytracer.h"
 
 #include <args.hxx>
@@ -11,17 +11,17 @@
 using namespace VRaytracer;
 
 int main(int argc, char** argv)
-{ 
+{
 #ifdef VRT_WINDOWS
     SetConsoleOutputCP(65001);
 #endif
 
     Log::Init();
 
-	RaytracerConfiguration config;
+    RaytracerConfiguration config;
     Raytracer              raytracer(config);
-    
+
     raytracer.Run();
-    
-	return 0;
+
+    return 0;
 }

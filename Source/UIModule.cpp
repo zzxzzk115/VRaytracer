@@ -1,10 +1,11 @@
 #include "UIModule.h"
 #include "Macro.h"
 #include "Raytracer.h"
+#include "Configuration.h"
 
-#include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "imgui.h"
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
@@ -20,6 +21,8 @@
 
 namespace VRaytracer
 {
+    const char* UIModule::m_Scenes[] = {"RandomScene", "SimpleCornellBox"};
+
     bool UIModule::Init()
     {
         // Decide GL+GLSL versions
@@ -62,10 +65,16 @@ namespace VRaytracer
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init(glslVersion);
 
+        // Load Default Scene the first time
+        auto sceneConfig = ConfigLoader::LoadBuiltinScene(m_Scenes[0]);
+        std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfig));
+        std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
+        m_RenderConfigLastFrame = m_RenderConfig;
+
         return true;
     }
 
-    void UIModule::Update() 
+    void UIModule::Update()
     {
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -140,7 +149,7 @@ namespace VRaytracer
         glfwSwapBuffers(nativeWindow);
     }
 
-    void UIModule::Release() 
+    void UIModule::Release()
     {
         // Cleanup
         ImGui_ImplOpenGL3_Shutdown();
@@ -148,7 +157,7 @@ namespace VRaytracer
         ImGui::DestroyContext();
     }
 
-    void UIModule::DrawWidgets() 
+    void UIModule::DrawWidgets()
     {
         Renderer::Clear(0.45f, 0.55f, 0.60f, 1.00f);
 
@@ -173,9 +182,20 @@ namespace VRaytracer
 
         // Draw Control Panel
         ImGui::Begin("Control Panel");
+        ImGui::Combo("Scene", (int*)&m_RenderConfig.SceneID, m_Scenes, IM_ARRAYSIZE(m_Scenes));
         ImGui::DragScalar("Samples Per Pixel", ImGuiDataType_U32, &m_RenderConfig.SamplesPerPixel);
         ImGui::DragScalar("Max Depth", ImGuiDataType_U32, &m_RenderConfig.MaxDepth);
-        bool     needRenderNewFrame = ImGui::Button("Render");
+
+        // test
+        if (m_RenderConfigLastFrame.SceneID != m_RenderConfig.SceneID)
+        {
+            auto sceneConfig = ConfigLoader::LoadBuiltinScene(m_Scenes[m_RenderConfig.SceneID]);
+            std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfig));
+            std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
+        }
+
+        m_RenderConfigLastFrame = m_RenderConfig;
+        bool needRenderNewFrame = ImGui::Button("Render");
         ImGui::End();
 
         // Draw RenderTarget
@@ -184,15 +204,15 @@ namespace VRaytracer
         ImGui::PopStyleVar();
         if (needRenderNewFrame)
         {
-            auto         size = ImGui::GetContentRegionAvail();
+            auto size = ImGui::GetContentRegionAvail();
             if (size.x <= 0 || size.y <= 0)
             {
                 size = {600, 400};
             }
-            
+
             m_RenderTextureWidth = m_RenderConfig.RenderTargetWidth = size.x;
             m_RenderTextureHeight = m_RenderConfig.RenderTargetHeight = size.y;
-            
+
             Raytracer::GetCore()->Render(m_RenderConfig);
         }
 
@@ -201,7 +221,7 @@ namespace VRaytracer
         {
             Renderer::Render(frameBuffer);
         }
-        
+
         auto renderTextureID = Renderer::GetRenderTextureID();
         if (renderTextureID != 0)
         {

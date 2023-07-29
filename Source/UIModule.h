@@ -20,5 +20,7 @@ namespace VRaytracer
     private:
         uint32_t     m_RenderTextureWidth, m_RenderTextureHeight;
         RenderConfig m_RenderConfig;
+        RenderConfig m_RenderConfigLastFrame;
+        static const char* m_Scenes[];
     };
 } // namespace VRaytracer

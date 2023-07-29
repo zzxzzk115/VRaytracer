@@ -1,0 +1,29 @@
+{
+  "Scene": {
+    "CameraConfig": {
+      "LookFrom": {
+        "X": 13.0,
+        "Y": 2.0,
+        "Z": 3.0
+      },
+      "LookAt": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "ViewUp": {
+        "X": 0.0,
+        "Y": 1.0,
+        "Z": 0.0
+      },
+      "DistanceToFocus": 10.0,
+      "Aperture": 0.1,
+      "FOV": 20.0
+    },
+    "BackgroundColor": {
+      "X": 0.5,
+      "Y": 0.7,
+      "Z": 1.0
+    }
+  }
+}
