@@ -1,6 +1,7 @@
 #include "Log.h"
 #include "Platform.h"
 #include "Raytracer.h"
+#include "FileSystem.h"
 
 #include <args.hxx>
 
@@ -17,7 +18,7 @@ int main(int argc, char** argv)
 #endif
 
     Log::Init();
-
+    FileSystem::InitExecutableDirectory(argv[0]);
     RaytracerConfiguration config;
     Raytracer              raytracer(config);
 

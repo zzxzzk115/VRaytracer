@@ -1,7 +1,7 @@
 #include "UIModule.h"
+#include "Configuration.h"
 #include "Macro.h"
 #include "Raytracer.h"
-#include "Configuration.h"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -21,7 +21,7 @@
 
 namespace VRaytracer
 {
-    const char* UIModule::m_Scenes[] = {"RandomScene", "SimpleCornellBox"};
+    const char* UIModule::s_Scenes[] = {"RandomScene", "SimpleCornellBox"};
 
     bool UIModule::Init()
     {
@@ -66,10 +66,13 @@ namespace VRaytracer
         ImGui_ImplOpenGL3_Init(glslVersion);
 
         // Load Default Scene the first time
-        auto sceneConfig = ConfigLoader::LoadBuiltinScene(m_Scenes[0]);
-        std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfig));
-        std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
-        m_RenderConfigLastFrame = m_RenderConfig;
+        auto sceneConfig = ConfigLoader::LoadBuiltinScene(s_Scenes[0]);
+        if (sceneConfig != nullptr)
+        {
+            std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfig));
+            std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
+            m_RenderConfigLastFrame = m_RenderConfig;
+        }
 
         return true;
     }
@@ -182,14 +185,14 @@ namespace VRaytracer
 
         // Draw Control Panel
         ImGui::Begin("Control Panel");
-        ImGui::Combo("Scene", (int*)&m_RenderConfig.SceneID, m_Scenes, IM_ARRAYSIZE(m_Scenes));
+        ImGui::Combo("Scene", reinterpret_cast<int*>(&m_RenderConfig.SceneID), s_Scenes, IM_ARRAYSIZE(s_Scenes));
         ImGui::DragScalar("Samples Per Pixel", ImGuiDataType_U32, &m_RenderConfig.SamplesPerPixel);
         ImGui::DragScalar("Max Depth", ImGuiDataType_U32, &m_RenderConfig.MaxDepth);
 
         // test
         if (m_RenderConfigLastFrame.SceneID != m_RenderConfig.SceneID)
         {
-            auto sceneConfig = ConfigLoader::LoadBuiltinScene(m_Scenes[m_RenderConfig.SceneID]);
+            auto sceneConfig = ConfigLoader::LoadBuiltinScene(s_Scenes[m_RenderConfig.SceneID]);
             std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfig));
             std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
         }
@@ -225,8 +228,9 @@ namespace VRaytracer
         auto renderTextureID = Renderer::GetRenderTextureID();
         if (renderTextureID != 0)
         {
-            ImVec2 frameBufferSize {(float)m_RenderTextureWidth, (float)m_RenderTextureHeight};
-            ImGui::Image((ImTextureID)(intptr_t)renderTextureID, frameBufferSize, {0, 1}, {1, 0});
+            ImVec2 frameBufferSize {static_cast<float>(m_RenderTextureWidth),
+                                    static_cast<float>(m_RenderTextureHeight)};
+            ImGui::Image((ImTextureID) static_cast<intptr_t>(renderTextureID), frameBufferSize, {0, 1}, {1, 0});
         }
         ImGui::End();
     }

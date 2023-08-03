@@ -71,7 +71,7 @@ namespace VRaytracer
             std::filesystem::path scenePath = FileSystem::GetExecutableRelativeDirectory("Resources/Scenes/" + sceneName + s_ConfigSuffix);
             if (!std::filesystem::exists(scenePath))
             {
-                VRT_ERROR("Scene configuration not found!");
+                VRT_ERROR("Scene configuration not found at {0}!", scenePath);
                 return nullptr;
             }
 
