@@ -37,4 +37,4 @@ cmake-build-release/
 
 # Imgui config
 imgui.ini
-!Source/Resources/imgui.ini
+!Source/AppData/imgui.ini
