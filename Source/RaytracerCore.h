@@ -1418,7 +1418,7 @@ namespace VRaytracer
         uint32_t                Height;
     };
 
-    struct RenderCameraConfig
+    struct RenderCameraConfiguration
     {
         Point3  LookFrom;
         Point3  LookAt;
@@ -1428,11 +1428,11 @@ namespace VRaytracer
         double  FOV;
     };
 
-    struct RenderConfig
+    struct RenderConfiguration
     {
         uint32_t           RenderTargetWidth;
         uint32_t           RenderTargetHeight;
-        RenderCameraConfig CameraConfig;
+        RenderCameraConfiguration CameraConfig;
         Color              BackgroundColor = Black;
         uint32_t           RenderTileSize  = 16;
         uint32_t           SamplesPerPixel = 10;
@@ -1449,7 +1449,7 @@ namespace VRaytracer
         RaytracerCore() {}
         const std::shared_ptr<FrameBuffer>& GetFrameBuffer() const { return m_FrameBuffer; }
 
-        void Render(RenderConfig config)
+        void Render(RenderConfiguration config)
         {
             auto frameBufferWidth  = config.RenderTargetWidth;
             auto frameBufferHeight = config.RenderTargetHeight;

@@ -69,7 +69,7 @@ namespace VRaytracer
         auto sceneConfig = ConfigLoader::LoadBuiltinScene(s_Scenes[0]);
         if (sceneConfig != nullptr)
         {
-            std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfig));
+            std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfiguration));
             std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
             m_RenderConfigLastFrame = m_RenderConfig;
         }
@@ -193,7 +193,7 @@ namespace VRaytracer
         if (m_RenderConfigLastFrame.SceneID != m_RenderConfig.SceneID)
         {
             auto sceneConfig = ConfigLoader::LoadBuiltinScene(s_Scenes[m_RenderConfig.SceneID]);
-            std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfig));
+            std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfiguration));
             std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
         }
 

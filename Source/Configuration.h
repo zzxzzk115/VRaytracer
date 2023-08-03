@@ -24,7 +24,7 @@ namespace VRaytracer
     using Point3Info = Vector3Info;
     using ColorInfo = Vector3Info;
 
-    struct CameraConfig
+    struct CameraConfiguration
     {
         Point3Info  LookFrom;
         Point3Info  LookAt;
@@ -45,9 +45,9 @@ namespace VRaytracer
         }
     };
 
-    struct SceneConfig
+    struct SceneConfiguration
     {
-        CameraConfig CameraConfig;
+        CameraConfiguration CameraConfig;
         ColorInfo    BackgroundColor;
 
         template<class Archive>
@@ -66,7 +66,7 @@ namespace VRaytracer
     class ConfigLoader
     {
     public:
-        static Ref<SceneConfig> LoadBuiltinScene(std::string sceneName)
+        static Ref<SceneConfiguration> LoadBuiltinScene(std::string sceneName)
         {
             std::filesystem::path scenePath = FileSystem::GetExecutableRelativeDirectory("Resources/Scenes/" + sceneName + s_ConfigSuffix);
             if (!std::filesystem::exists(scenePath))
@@ -75,13 +75,13 @@ namespace VRaytracer
                 return nullptr;
             }
 
-            SceneConfig sceneConfig;
+            SceneConfiguration sceneConfig;
 
             std::ifstream            is(scenePath);
             cereal::JSONInputArchive archive(is);
             archive(cereal::make_nvp("Scene", sceneConfig));
 
-            return CreateRef<SceneConfig>(sceneConfig);
+            return CreateRef<SceneConfiguration>(sceneConfig);
         }
 
     private:
