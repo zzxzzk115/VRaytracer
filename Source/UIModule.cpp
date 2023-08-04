@@ -185,17 +185,36 @@ namespace VRaytracer
 
         // Draw Control Panel
         ImGui::Begin("Control Panel");
-        ImGui::Combo("Scene", reinterpret_cast<int*>(&m_RenderConfig.SceneID), s_Scenes, IM_ARRAYSIZE(s_Scenes));
-        ImGui::DragScalar("Samples Per Pixel", ImGuiDataType_U32, &m_RenderConfig.SamplesPerPixel);
-        ImGui::DragScalar("Max Depth", ImGuiDataType_U32, &m_RenderConfig.MaxDepth);
 
-        // test
+        ImGui::Text("Scene Configuration");
+        ImGui::Indent();
+        ImGui::Combo("Scene", reinterpret_cast<int*>(&m_RenderConfig.SceneID), s_Scenes, IM_ARRAYSIZE(s_Scenes));
+        ImGui::Unindent();
+
+        // Load Configuration
         if (m_RenderConfigLastFrame.SceneID != m_RenderConfig.SceneID)
         {
             auto sceneConfig = ConfigLoader::LoadBuiltinScene(s_Scenes[m_RenderConfig.SceneID]);
             std::memcpy(&m_RenderConfig.CameraConfig, &sceneConfig->CameraConfig, sizeof(CameraConfiguration));
-            std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(Color));
+            std::memcpy(&m_RenderConfig.QualityConfig, &sceneConfig->QualityConfig, sizeof(QualityConfiguration));
+            std::memcpy(&m_RenderConfig.BackgroundColor, &sceneConfig->BackgroundColor, sizeof(ColorInfo));
         }
+
+        ImGui::Text("Camera Configuration");
+        ImGui::Indent();
+        ImGui::DragScalarN("LookFrom", ImGuiDataType_Double, &m_RenderConfig.CameraConfig.LookFrom, 3);
+        ImGui::DragScalarN("LookAt", ImGuiDataType_Double, &m_RenderConfig.CameraConfig.LookAt, 3);
+        ImGui::DragScalarN("ViewUp", ImGuiDataType_Double, &m_RenderConfig.CameraConfig.ViewUp, 3);
+        ImGui::DragScalar("DistanceToFocus", ImGuiDataType_Double, &m_RenderConfig.CameraConfig.DistanceToFocus);
+        ImGui::DragScalar("Aperture", ImGuiDataType_Double, &m_RenderConfig.CameraConfig.Aperture);
+        ImGui::DragScalar("FOV", ImGuiDataType_Double, &m_RenderConfig.CameraConfig.FOV);
+        ImGui::Unindent();
+
+        ImGui::Text("Quality Configuration");
+        ImGui::Indent();
+        ImGui::DragScalar("Samples Per Pixel", ImGuiDataType_U32, &m_RenderConfig.QualityConfig.SamplesPerPixel);
+        ImGui::DragScalar("Max Depth", ImGuiDataType_U32, &m_RenderConfig.QualityConfig.MaxDepth);
+        ImGui::Unindent();
 
         m_RenderConfigLastFrame = m_RenderConfig;
         bool needRenderNewFrame = ImGui::Button("Render");

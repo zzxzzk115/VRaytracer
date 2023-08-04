@@ -22,7 +22,7 @@ namespace VRaytracer
     };
 
     using Point3Info = Vector3Info;
-    using ColorInfo = Vector3Info;
+    using ColorInfo  = Vector3Info;
 
     struct CameraConfiguration
     {
@@ -45,21 +45,34 @@ namespace VRaytracer
         }
     };
 
+    struct QualityConfiguration
+    {
+        uint32_t SamplesPerPixel = 10;
+        uint32_t MaxDepth        = 4;
+
+        template<class Archive>
+        void serialize(Archive& archive)
+        {
+            archive(CEREAL_NVP(SamplesPerPixel), CEREAL_NVP(MaxDepth));
+        }
+    };
+
     struct SceneConfiguration
     {
-        CameraConfiguration CameraConfig;
-        ColorInfo    BackgroundColor;
+        CameraConfiguration  CameraConfig;
+        QualityConfiguration QualityConfig;
+        ColorInfo            BackgroundColor;
 
         template<class Archive>
         void save(Archive& archive) const
         {
-            archive(CEREAL_NVP(CameraConfig), CEREAL_NVP(BackgroundColor));
+            archive(CEREAL_NVP(CameraConfig), CEREAL_NVP(QualityConfig), CEREAL_NVP(BackgroundColor));
         }
 
         template<class Archive>
         void load(Archive& archive)
         {
-            archive(CEREAL_NVP(CameraConfig), CEREAL_NVP(BackgroundColor));
+            archive(CEREAL_NVP(CameraConfig), CEREAL_NVP(QualityConfig), CEREAL_NVP(BackgroundColor));
         }
     };
 
@@ -68,7 +81,8 @@ namespace VRaytracer
     public:
         static Ref<SceneConfiguration> LoadBuiltinScene(std::string sceneName)
         {
-            std::filesystem::path scenePath = FileSystem::GetExecutableRelativeDirectory("Resources/Scenes/" + sceneName + s_ConfigSuffix);
+            std::filesystem::path scenePath =
+                FileSystem::GetExecutableRelativeDirectory("Resources/Scenes/" + sceneName + s_ConfigSuffix);
             if (!std::filesystem::exists(scenePath))
             {
                 VRT_ERROR("Scene configuration not found at {0}!", scenePath);

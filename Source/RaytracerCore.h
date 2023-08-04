@@ -1428,16 +1428,21 @@ namespace VRaytracer
         double  FOV;
     };
 
+    struct RenderQualityConfiguration
+    {
+        uint32_t SamplesPerPixel = 10;
+        uint32_t MaxDepth        = 4;
+    };
+
     struct RenderConfiguration
     {
-        uint32_t           RenderTargetWidth;
-        uint32_t           RenderTargetHeight;
-        RenderCameraConfiguration CameraConfig;
-        Color              BackgroundColor = Black;
-        uint32_t           RenderTileSize  = 16;
-        uint32_t           SamplesPerPixel = 10;
-        uint32_t           MaxDepth        = 4;
-        uint32_t           SceneID         = 0;
+        uint32_t                   RenderTargetWidth;
+        uint32_t                   RenderTargetHeight;
+        RenderCameraConfiguration  CameraConfig;
+        Color                      BackgroundColor = Black;
+        uint32_t                   RenderTileSize  = 16;
+        RenderQualityConfiguration QualityConfig;
+        uint32_t                   SceneID = 0;
     };
 
     static ThreadPool Pool(std::thread::hardware_concurrency() - 1);
@@ -1454,8 +1459,8 @@ namespace VRaytracer
             auto frameBufferWidth  = config.RenderTargetWidth;
             auto frameBufferHeight = config.RenderTargetHeight;
             auto tileSize          = config.RenderTileSize;
-            auto samplesPerPixel   = config.SamplesPerPixel;
-            auto maxDepth          = config.MaxDepth;
+            auto samplesPerPixel   = config.QualityConfig.SamplesPerPixel;
+            auto maxDepth          = config.QualityConfig.MaxDepth;
 
             m_FrameBuffer = std::make_shared<FrameBuffer>(
                 std::vector<PixelColor>(frameBufferWidth * frameBufferHeight), frameBufferWidth, frameBufferHeight);

@@ -20,6 +20,10 @@
       "Aperture": 0.1,
       "FOV": 20.0
     },
+    "QualityConfig": {
+      "SamplesPerPixel": 10,
+      "MaxDepth": 4
+    },
     "BackgroundColor": {
       "X": 0.5,
       "Y": 0.7,
