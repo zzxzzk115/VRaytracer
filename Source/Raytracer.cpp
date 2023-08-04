@@ -34,7 +34,7 @@ namespace VRaytracer
 
         // Create Window
         WindowConfiguration windowConfig;
-        windowConfig.Width = 1280;
+        windowConfig.Width = 1600;
         windowConfig.Height = 960;
         windowConfig.EnableVSync = true;
 
