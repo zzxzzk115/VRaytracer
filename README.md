@@ -22,15 +22,23 @@
     </a>
 </p>
 
-> VRaytracer is still under development.
+> **VRaytracer** is still under development.
 
 ## Screenshots
 
 ![Example 001](./Docs/Media/Screenshots/VRaytracer_Examle001.png)
 
+## Features
+
+- GUI with ImGui
+- Multi-threaded rendering
+- Configurable scenes
+- PBR Shading & Materials (TODO)
+- Wavefont OBJ support (TODO)
+
 ## Prerequisites
 
-To build VRaytracer, you must first install the following tools.
+To build **VRaytracer**, you must first install the following tools.
 
 ### Windows 10/11
 
